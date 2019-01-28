@@ -1,0 +1,83 @@
+function checkReminder() {
+  // get the spreadsheet object
+  var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  // set the first sheet as active
+  SpreadsheetApp.setActiveSheet(spreadsheet.getSheets()[0]);
+  // fetch this sheet
+  var sheet = spreadsheet.getActiveSheet();
+   
+  // figure out what the last row is
+  var lastRow = sheet.getLastRow();
+ 
+  // the rows are indexed starting at 1, and the first row
+  // is the headers, so start with row 2
+  var startRow = 2;
+ 
+  // grab column 10 (the 'days left' column) 
+  var range = sheet.getRange(2,10,lastRow-startRow+1,1 );
+  var numRows = range.getNumRows();
+  var days_left_values = range.getValues();
+   
+  // grab column 2 (the 'owner' column) 
+  var range = sheet.getRange(2,2,lastRow-startRow+1,1 );
+  var numRows = range.getNumRows();
+  var ownerValues = range.getValues();
+
+  // grab column 6 (the 'premium due date' column) 
+  var range = sheet.getRange(2,6,lastRow-startRow+1,1 );
+  var numRows = range.getNumRows();
+  var dueDateValues = range.getValues();
+
+  // grab column 7 (the 'premium amount' column) 
+  var range = sheet.getRange(2,7,lastRow-startRow+1,1 );
+  var numRows = range.getNumRows();
+  var amountDueValues = range.getValues();
+
+  
+  // Now, grab the reminder name column
+  range = sheet.getRange(2, 1, lastRow-startRow+1, 1);
+  var reminder_info_values = range.getValues();
+   
+  var warning_count = 0;
+  var msg = "";
+   
+  // Loop over the days left values
+  for (var i = 0; i <= numRows - 1; i++) {
+    var days_left = days_left_values[i][0];
+    var dueDate = dueDateValues[i][0];
+    var amountDue = amountDueValues[i][0];
+    var owner = ownerValues[i][0];
+
+    //if(days_left == 7) {
+    if(days_left == 30 || days_left == 15 || days_left == 7 || days_left == 0) {  
+      // if it's exactly 7, do something with the data.
+      var reminder_name = reminder_info_values[i][0];
+      //msg = msg + "Reminder: "+reminder_name+" is due in "+days_left+" days.\n";
+      msg = msg + "Reminder: PolicyNumber: "+reminder_name+
+        "\nowner: "+ owner+ 
+        "\namountDue: "+ amountDue+ 
+        "\ndueDate: "+ formatDate(dueDate)+ 
+        "\ndue in: "+days_left+" days.\n\n";
+      warning_count++;
+    }
+  }
+   
+  if(warning_count) {
+    MailApp.sendEmail("cl_almeda@yahoo.com, rosanna.r.almeda@sunlife.com.ph", 
+        "Payment Due Date Reminder Message", msg);
+  }
+  Logger.log(msg);
+   
+};
+
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
+}

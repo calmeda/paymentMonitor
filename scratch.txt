@@ -1,0 +1,24 @@
+	public ArrayList<PlayerStat> getDoubleDoublePlayerStat(String gameDateStr)
+	{
+		ArrayList<Policy> psList = new ArrayList<Policy>();
+		MongoDatabase db = getDatabase();
+	    BasicDBObject whereQuery = new BasicDBObject();
+	    whereQuery.put("gameDate", new BasicDBObject("$eq", gameDateStr));
+
+	    MongoCursor<Document> cursor1 = db.getCollection("dailyStat").find(whereQuery).iterator();
+    	Gson gson = new Gson(); 
+
+	    while(cursor1.hasNext()) {
+	    	psList.add(gson.fromJson(cursor1.next().toJson(), Policy.class));
+	    }
+	    
+	    return psList;
+	}
+
+
+SunlifePoliciesSample
+PaymentDueDate
+
+db.PaymentDueDate.find( { PaymentIssueDate: { $gt: new Date('2017-01-01') } } )
+
+db.getCollection("PaymentDueDate").find({ $gt: new Date('2017-01-01') })

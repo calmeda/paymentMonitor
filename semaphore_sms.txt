@@ -1,0 +1,1 @@
+curl --data "apikey=7ec6d99734d54fecd26d441cf6738481&number=09209382483&message=I just sent my first message with Semaphore" https://semaphore.co/api/v4/messages
