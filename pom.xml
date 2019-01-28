@@ -5,7 +5,7 @@
 	<artifactId>paymentMonitor</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>paymentMonitor</name>
-	<description>paymentMonitor for various insurance policies</description>
+	<description>paymentMonitor for various sunlife insurance policies</description>
 
 	<dependencies>
 		<dependency>
